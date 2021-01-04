@@ -16,22 +16,26 @@ public class Main {
 	 * De l'état [0] à l'état [2] avec le symbole [1]
 	 */
 	private static String[][] transitions = {
-			{"0","a","0"},
-			{"0","a","1"},
-			{"0","b","0"},
 			{"1","a","2"},
-			{"2","b","3"}
+			{"1","a","3"},
+			{"1","b","4"},
+			{"2","b","4"},
+			{"4","b","4"},
+			{"3","b","5"},
+			{"6","b","4"},
+			{"5","a","6"},
+			{"3","a","6"}
 	};
 	
 	/**
 	 * Etat initial
 	 */
-	private static String eI = "0";
+	private static String eI = "1";
 	
 	/**
 	 * Etat final
 	 */
-	private static String eF = "3";
+	private static String eF = "6";
 	
 	/**
 	 * Liste des symboles de l'alphabet
