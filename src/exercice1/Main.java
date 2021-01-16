@@ -56,6 +56,11 @@ public class Main {
 	 */
 	private static ArrayList<String[]> nouvellesTransitions;
 	
+	/**
+	 * Liste des supers états finaux (il peut y en avoir qu'un seul)
+	 */
+	private static ArrayList<String[]> supersEtatsFinaux;
+	
 	/* 
 	 * *********************** Main ***********************
 	 */
@@ -107,13 +112,14 @@ public class Main {
 							
 							superEtat += transitionCourante[2];
 							
+							//Si le super état contient un état final
 							if ((transitionCourante[2]).equals(eF)) {
 								superEtatFinal = superEtat;
 							}
 						}
 					}
 					
-					if (!superEtatExiste(superEtat)) {
+					if (!superEtatExiste(supersEtats, superEtat) && !superEtat.equals("")) {
 						
 						System.out.println("Ajouter : " + superEtat);
 						supersEtats.add(superEtat);
@@ -146,13 +152,27 @@ public class Main {
 	 */
 	
 	/**
-	 * Détermine si le super état passé en paramètre existe déjà
+	 * Détermine si le super état passé en paramètre existe déjà dans la liste passé en paramètre elle aussi
 	 * @return true si et seulement si le super état existe déjà,
-	 * c'est à dire s'il est déjà contenu la liste supersEtats
+	 * c'est à dire s'il est déjà contenu la liste passé en paramètre
 	 */
-	public static boolean superEtatExiste(String superEtat) {
-		for (int i = 0; i < supersEtats.size(); i++) {
-			if ((supersEtats.get(i)).equals(superEtat)) {
+	public static boolean superEtatExiste(ArrayList<String> listeSupersEtats, String superEtat) {
+		for (int i = 0; i < listeSupersEtats.size(); i++) {
+			if ((listeSupersEtats.get(i)).equals(superEtat)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Détermine si l'état passé en paramètre, est un état final
+	 * @return true si et seulement si l'état (superEtat) est une chaîne égale et 
+	 * équivalente à une chaîne du tableau etatsFinaux passé en premier paramètre
+	 */
+	public static boolean estFinal(String[] etatsFinaux, String superEtat) {
+		for (int i = 0; i < etatsFinaux.length; i++) {
+			if (etatsFinaux[i].equals(superEtat)) {
 				return true;
 			}
 		}
