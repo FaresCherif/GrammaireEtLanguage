@@ -2,10 +2,6 @@ package exercice2;
 
 import java.util.ArrayList;
 
-//https://fr.wikipedia.org/wiki/Minimisation_d%27un_automate_fini_d%C3%A9terministe
-
-//http://www.desmontils.net/emiage/Module209EMiage/c5/Ch5_9.htm
-
 /**
  * Contexte : Programme principal de l'exercice 2 du TP de Grammaires et Langages
  * Date : 17 Janvier 2021
@@ -47,9 +43,9 @@ public class Main {
 	private static String eI = "0";
 	
 	/**
-	 * Etat final
+	 * Etats finaux
 	 */
-	private static String eF = "2";
+	private static String[] etatsFinaux = {"2"};
 	
 	/**
 	 * Liste des symboles de l'alphabet
@@ -131,7 +127,7 @@ public class Main {
 		//Pour chacun des couples d'états
 		for (int i = 0; i < couplesEtats.size(); i++) {
 			String[] coupleEtat = couplesEtats.get(i); 
-			if (coupleEtat[0].equals(eF) || coupleEtat[1].equals(eF)) {
+			if (estFinal(coupleEtat[0]) || estFinal(coupleEtat[1])) {
 				etatsSeparables.add(coupleEtat);
 				print(coupleEtat[0] + "-" + coupleEtat[1]);
 			}
@@ -207,9 +203,14 @@ public class Main {
 	 * *********************** Méthodes ***********************
 	 */
 	
+	/**
+	 * Méthode/processus principal du programme pour déterminer si un couple d'état est séparable
+	 * @param coupleEtat : couple d'état dont on veut déterminer la séparabilité
+	 * @return true si et seulement si l'état est séparable
+	 */
 	public static boolean estSeparable(String[] coupleEtat) {
 		
-		if ((coupleEtat[0].equals(eF) && !coupleEtat[1].equals(eF)) || (!coupleEtat[0].equals(eF) && coupleEtat[1].equals(eF))) {
+		if ((estFinal(coupleEtat[0]) && !estFinal(coupleEtat[1])) || (!estFinal(coupleEtat[0]) && estFinal(coupleEtat[1]))) {
 			return true;
 		}
 		else {
@@ -268,6 +269,26 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Détermine si l'état passé en paramètre, est un état final
+	 * @param etat : état à vérifier
+	 * @return true si et seulement si l'état est une chaîne égale et 
+	 * équivalente à une chaîne du tableau des états finaux
+	 */
+	public static boolean estFinal(String etat) {
+		for (int i = 0; i < etatsFinaux.length; i++) {
+			if (etatsFinaux[i].equals(etat)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Vérifie si l'état passé en paramètre est contenu dans un état fusionné
+	 * @param etat : état à vérifier
+	 * @return true si et seulement si l'état passé en paramètre est contenu dans un état fusionné
+	 */
 	public static boolean estDansUnEtatFusionne(String etat) {
 		for (int i = 0; i < etatsFusionnes.size(); i++) {
 			

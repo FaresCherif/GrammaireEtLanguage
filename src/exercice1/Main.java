@@ -9,7 +9,9 @@ import java.util.ArrayList;
  */
 public class Main {
 	
-	// *********************** Initialisation : exemple du cours ***********************
+	// *********************** Initialisation ***********************
+	//Exemple utilisé : http://www.desmontils.net/emiage/Module209EMiage/c5/Ch5_8.htm
+	//Fonctionne aussi sur l'exemple vu en cours
 	
 	/**
 	 * Liste des transitions
@@ -33,9 +35,9 @@ public class Main {
 	private static String eI = "1";
 	
 	/**
-	 * Etat final
+	 * Etats finaux
 	 */
-	private static String eF = "6";
+	private static String[] etatsFinaux = {"3","4","5","6"};
 	
 	/**
 	 * Liste des symboles de l'alphabet
@@ -59,7 +61,7 @@ public class Main {
 	/**
 	 * Liste des supers états finaux (il peut y en avoir qu'un seul)
 	 */
-	private static ArrayList<String[]> supersEtatsFinaux;
+	private static ArrayList<String> supersEtatsFinaux;
 	
 	/* 
 	 * *********************** Main ***********************
@@ -73,11 +75,10 @@ public class Main {
 		
 		//Init
 		supersEtats = new ArrayList();
+		supersEtatsFinaux = new ArrayList();
 		supersEtats.add(eI);
 		nouvellesTransitions = new ArrayList();
 		//Fin init
-		
-		String superEtatFinal = "";
 		
 		int indexSuperEtat = 0;
 		
@@ -113,8 +114,8 @@ public class Main {
 							superEtat += transitionCourante[2];
 							
 							//Si le super état contient un état final
-							if ((transitionCourante[2]).equals(eF)) {
-								superEtatFinal = superEtat;
+							if (estFinal(transitionCourante[2]) && !superEtatExiste(supersEtatsFinaux, superEtat)) {
+								supersEtatsFinaux.add(superEtat);
 							}
 						}
 					}
@@ -139,7 +140,7 @@ public class Main {
 		
 		System.out.println("Super état initial : " + supersEtats.get(0));
 		
-		System.out.println("Super état final : " + superEtatFinal);
+		afficherSupersEtatsFinaux();
 		
 		afficherSupersEtats();
 		
@@ -152,7 +153,7 @@ public class Main {
 	 */
 	
 	/**
-	 * Détermine si le super état passé en paramètre existe déjà dans la liste passé en paramètre elle aussi
+	 * Détermine si le super état passé en paramètre existe déjà dans la liste, passé en paramètre elle aussi
 	 * @return true si et seulement si le super état existe déjà,
 	 * c'est à dire s'il est déjà contenu la liste passé en paramètre
 	 */
@@ -168,9 +169,9 @@ public class Main {
 	/**
 	 * Détermine si l'état passé en paramètre, est un état final
 	 * @return true si et seulement si l'état (superEtat) est une chaîne égale et 
-	 * équivalente à une chaîne du tableau etatsFinaux passé en premier paramètre
+	 * équivalente à une chaîne du tableau des états finaux
 	 */
-	public static boolean estFinal(String[] etatsFinaux, String superEtat) {
+	public static boolean estFinal(String superEtat) {
 		for (int i = 0; i < etatsFinaux.length; i++) {
 			if (etatsFinaux[i].equals(superEtat)) {
 				return true;
@@ -187,21 +188,36 @@ public class Main {
 		for (int i = 0; i < supersEtats.size(); i++) {
 			System.out.println("=> " + supersEtats.get(i));
 		}
+		System.out.println("");
 	}
 	
 	/**
-	 * Affiche la liste des nouvelles transitions
+	 * Affiche la liste des supers états finaux
+	 */
+	public static void afficherSupersEtatsFinaux() {
+		System.out.println("Liste des super Etats finaux : ");
+		for (int i = 0; i < supersEtatsFinaux.size(); i++) {
+			System.out.println("=> " + supersEtatsFinaux.get(i));
+		}
+		System.out.println("");
+	}
+	
+	/**
+	 * Affiche la liste des nouvelles transitions à partir des super états
 	 */
 	public static void afficherNouvellesTransitions() {
 		System.out.println("Liste des nouvelles transitions obtenues : ");
 		for (int i = 0; i < nouvellesTransitions.size(); i++) {
 			String[] nouvelleTransitionCourante = nouvellesTransitions.get(i); 
-			System.out.println("=> De l'état " + nouvelleTransitionCourante[0] + " à l'état " + nouvelleTransitionCourante[2] + " avec le symbole " + nouvelleTransitionCourante[1]);
+			if (!nouvelleTransitionCourante[2].equals("")) {
+				System.out.println("=> De l'état " + nouvelleTransitionCourante[0] + " à l'état " + nouvelleTransitionCourante[2] + " avec le symbole " + nouvelleTransitionCourante[1]);
+			}
 		}
+		System.out.println("");
 	}
 	
 	/**
-	 * Affiche le découpage du super état courant
+	 * Affiche le découpage du super état passé en paramètre
 	 */
 	public static void afficherDecoupage(String[] superEtat) {
 		System.out.print("Découpage du super état : [");
@@ -209,5 +225,6 @@ public class Main {
 			System.out.print(" " + superEtat[i] + " ");
 		}
 		System.out.println("]");
+		System.out.println("");
 	}
 }
